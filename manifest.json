@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Sentry",
+  "version": "1.0.0",
+  "description": "Sentry Chrome Extension",
+  "permissions": [
+    "sidePanel",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://mail.google.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/index.js"
+  },
+  "side_panel": {
+    "default_path": "src/sidebar/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "src/content/scraper.js",
+        "src/content/index.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_title": "Open Sentry Side Panel"
+  }
+}
