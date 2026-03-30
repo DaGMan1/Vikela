@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Vikela",
   "version": "2.0.0",
-  "description": "Vikela — Know everyone who emails you. Sender intelligence, email history, OSINT.",
+  "description": "Vikela \u2014 Know everyone who emails you. Sender intelligence, email history, OSINT.",
   "icons": {
     "48": "src/assets/icon.png",
     "128": "src/assets/icon.png"
@@ -12,25 +12,15 @@
     "scripting",
     "activeTab",
     "storage",
-    "identity",
     "alarms",
     "tabs"
   ],
   "host_permissions": [
     "https://mail.google.com/*",
-    "https://www.googleapis.com/*",
-    "https://people.googleapis.com/*",
     "https://rdap.org/*",
     "https://haveibeenpwned.com/*",
     "https://api.hunter.io/*"
   ],
-  "oauth2": {
-    "client_id": "YOUR_CLIENT_ID.apps.googleusercontent.com",
-    "scopes": [
-      "https://www.googleapis.com/auth/gmail.readonly",
-      "https://www.googleapis.com/auth/contacts.readonly"
-    ]
-  },
   "background": {
     "service_worker": "build/background.bundle.js"
   },
@@ -45,17 +35,27 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://mail.google.com/*"],
-      "js": ["src/content/scraper.js"],
-      "css": ["src/content/halo.css"],
+      "matches": [
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "src/content/scraper.js"
+      ],
+      "css": [
+        "src/content/halo.css"
+      ],
       "run_at": "document_idle",
       "all_frames": false
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/assets/*"],
-      "matches": ["https://mail.google.com/*"]
+      "resources": [
+        "src/assets/*"
+      ],
+      "matches": [
+        "https://mail.google.com/*"
+      ]
     }
   ]
 }
