@@ -95,7 +95,22 @@ function showLoading() {
 function showContent() {
   document.getElementById('loading-state').classList.add('hidden');
   document.getElementById('main-content').classList.remove('hidden');
+  const es = document.getElementById('empty-state'); if (es) es.style.display='none';
 }
+function showEmptyState() {
+  document.getElementById('loading-state').classList.add('hidden');
+  document.getElementById('main-content').classList.add('hidden');
+  let el = document.getElementById('empty-state');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'empty-state';
+    el.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#64748b;text-align:center;padding:32px;gap:16px;';
+    el.innerHTML = '<div style="font-size:40px">✉️</div><div style="font-size:15px;font-weight:600;color:#94a3b8">Open an email</div><div style="font-size:13px;line-height:1.6">Click any email in Gmail and Vikela will show the sender profile here automatically.</div>';
+    document.body.appendChild(el);
+  }
+  el.style.display = 'flex';
+}
+
 
 // ─── Tab switching ────────────────────────────────────────────────────────────
 
@@ -642,7 +657,7 @@ async function loadCurrentSender() {
   }
 
   // All attempts exhausted — stay in loading/empty state
-  console.info('[Vikela] No sender found after 10 attempts — waiting for push update.');
+  console.info('[Vikela] No sender found — showing empty state.'); showEmptyState();
 }
 
 // ─── Event handlers ───────────────────────────────────────────────────────────
@@ -767,14 +782,14 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     case 'PROFILE_UPDATED':
     case 'SENDER_SELECTED':
       // msg.contact should be the full contact object
-      if (msg.contact) {
-        renderContact(msg.contact);
+      if (msg.data) {
+        renderContact(msg.data);
       }
       break;
 
     case 'CONTACT_UPDATED': {
       // Background signals that the contact has changed — re-fetch full profile
-      const email = msg.email;
+      const email = msg.data?.email;
       if (currentContact && email === currentContact.email) {
         sendMsg({ type: 'GET_CURRENT_SENDER' })
           .then((contact) => {

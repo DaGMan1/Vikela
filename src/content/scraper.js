@@ -6,7 +6,7 @@
 (function() {
     'use strict';
     
-    console.log('Sentry Scraper: Starting...');
+    console.log('Vikela: Starting...');
     
     let lastSender = null;
     let lastUrl = location.href;
@@ -16,14 +16,14 @@
         // Only run in email view (has .h7 header)
         const header = document.querySelector('.h7');
         if (!header) {
-            console.log('Sentry: No email header');
+            console.log('Vikela: No email header');
             return;
         }
         
         // Find sender span with email attribute
         const senderSpan = header.querySelector('span.gD[email]');
         if (!senderSpan) {
-            console.log('Sentry: No sender span found');
+            console.log('Vikela: No sender span found');
             return;
         }
         
@@ -31,7 +31,7 @@
         const name = senderSpan.textContent?.trim();
         
         if (!email || !email.includes('@')) {
-            console.log('Sentry: Invalid email');
+            console.log('Vikela: Invalid email');
             return;
         }
         
@@ -45,20 +45,20 @@
         if (parent) {
             const text = parent.textContent?.toLowerCase() || '';
             if (text.includes('to:') || text.includes('cc:')) {
-                console.log('Sentry: Skipping recipient field');
+                console.log('Vikela: Skipping recipient field');
                 return;
             }
         }
         
         lastSender = email;
-        console.log('Sentry: FOUND SENDER:', name, '<' + email + '>');
+        console.log('Vikela: FOUND SENDER:', name, '<' + email + '>');
         
         // Send to background
         chrome.runtime.sendMessage({
             type: 'SENDER_FOUND',
             data: { email, name }
         }).catch(err => {
-            console.log('Sentry: Background not ready');
+            console.log('Vikela: Background not ready');
         });
         
         // Apply visual indicator
@@ -68,11 +68,11 @@
     // Apply halo effect
     function applyVisualIndicator(element, email) {
         // Check if styles exist
-        if (!document.getElementById('sentry-styles')) {
+        if (!document.getElementById('vikela-styles')) {
             const style = document.createElement('style');
-            style.id = 'sentry-styles';
+            style.id = 'vikela-styles';
             style.textContent = `
-                .sentry-halo {
+                .vikela-halo {
                     background: rgba(34, 197, 94, 0.2) !important;
                     border: 2px solid #22c55e !important;
                     border-radius: 6px !important;
@@ -88,7 +88,7 @@
             data: { email }
         }).then(response => {
             if (response && response.status) {
-                element.classList.add('sentry-halo');
+                element.classList.add('vikela-halo');
                 element.setAttribute('title', `Trust: ${response.contactData?.trustScore || 0}%`);
             }
         }).catch(() => {});
