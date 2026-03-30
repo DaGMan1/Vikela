@@ -13,13 +13,15 @@
     "activeTab",
     "storage",
     "alarms",
-    "tabs"
+    "tabs",
+    "identity"
   ],
   "host_permissions": [
     "https://mail.google.com/*",
     "https://rdap.org/*",
     "https://haveibeenpwned.com/*",
-    "https://api.hunter.io/*"
+    "https://api.hunter.io/*",
+    "https://www.googleapis.com/*"
   ],
   "background": {
     "service_worker": "build/background.bundle.js"
@@ -57,5 +59,12 @@
         "https://mail.google.com/*"
       ]
     }
-  ]
+  ],
+  "oauth2": {
+    "client_id": "330853523987-01dv9edipno8fiani8bh225f7es3as32.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.readonly",
+      "https://www.googleapis.com/auth/contacts.readonly"
+    ]
+  }
 }
