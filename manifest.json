@@ -4,8 +4,10 @@
   "version": "2.0.0",
   "description": "Vikela \u2014 Know everyone who emails you. Sender intelligence, email history, OSINT.",
   "icons": {
-    "48": "src/assets/icon.png",
-    "128": "src/assets/icon.png"
+    "16": "src/assets/icon16.png",
+    "32": "src/assets/icon32.png",
+    "48": "src/assets/icon48.png",
+    "128": "src/assets/icon128.png"
   },
   "permissions": [
     "sidePanel",
@@ -29,7 +31,10 @@
   "action": {
     "default_title": "Open Vikela",
     "default_icon": {
-      "48": "src/assets/icon.png"
+      "16": "src/assets/icon16.png",
+      "32": "src/assets/icon32.png",
+      "48": "src/assets/icon48.png",
+      "128": "src/assets/icon128.png"
     }
   },
   "side_panel": {
