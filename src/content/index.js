@@ -1,8 +1,5 @@
-// Content script for Gmail DOM scraping
-console.log('Sentry content script loaded');
+// Sentry Content Script - Main Entry
+console.log('Sentry: Content script loaded v2');
 
-if (window.ScraperBot) {
-    new window.ScraperBot();
-} else {
-    console.error('ScraperBot class not found. Make sure scraper.js is loaded before index.js');
-}
+// The scraper is self-contained and runs immediately
+// No external dependencies needed

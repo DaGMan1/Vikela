@@ -1,0 +1,132 @@
+/* Halo Effect Styles for Gmail */
+
+.sentry-halo {
+    position: relative !important;
+    display: inline-block !important;
+    padding: 2px 6px !important;
+    margin: 0 2px !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+    cursor: help !important;
+}
+
+.sentry-halo::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -4px !important;
+    left: -4px !important;
+    right: -4px !important;
+    bottom: -4px !important;
+    border-radius: 8px !important;
+    z-index: -1 !important;
+    opacity: 0 !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Safe - Green */
+.sentry-halo.sentry-safe::before {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.4), rgba(76, 175, 80, 0.15)) !important;
+    box-shadow: 
+        0 0 12px rgba(76, 175, 80, 0.5),
+        0 0 24px rgba(76, 175, 80, 0.3),
+        inset 0 0 8px rgba(76, 175, 80, 0.1) !important;
+    opacity: 1 !important;
+    animation: sentry-pulse-green 2.5s infinite ease-in-out !important;
+}
+
+.sentry-halo.sentry-safe {
+    background: rgba(76, 175, 80, 0.08) !important;
+    border: 1px solid rgba(76, 175, 80, 0.4) !important;
+}
+
+/* Caution - Amber */
+.sentry-halo.sentry-caution::before {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.4), rgba(255, 193, 7, 0.15)) !important;
+    box-shadow: 
+        0 0 12px rgba(255, 193, 7, 0.5),
+        0 0 24px rgba(255, 193, 7, 0.3),
+        inset 0 0 8px rgba(255, 193, 7, 0.1) !important;
+    opacity: 1 !important;
+    animation: sentry-pulse-amber 2.5s infinite ease-in-out !important;
+}
+
+.sentry-halo.sentry-caution {
+    background: rgba(255, 193, 7, 0.08) !important;
+    border: 1px solid rgba(255, 193, 7, 0.4) !important;
+}
+
+/* Danger - Red */
+.sentry-halo.sentry-danger::before {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.5), rgba(244, 67, 54, 0.2)) !important;
+    box-shadow: 
+        0 0 15px rgba(244, 67, 54, 0.6),
+        0 0 30px rgba(244, 67, 54, 0.4),
+        inset 0 0 10px rgba(244, 67, 54, 0.15) !important;
+    opacity: 1 !important;
+    animation: sentry-pulse-red 1.5s infinite ease-in-out !important;
+}
+
+.sentry-halo.sentry-danger {
+    background: rgba(244, 67, 54, 0.1) !important;
+    border: 1px solid rgba(244, 67, 54, 0.5) !important;
+}
+
+/* Animations */
+@keyframes sentry-pulse-green {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.02);
+        opacity: 0.85;
+    }
+}
+
+@keyframes sentry-pulse-amber {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.03);
+        opacity: 0.8;
+    }
+}
+
+@keyframes sentry-pulse-red {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Hover effects */
+.sentry-halo:hover {
+    transform: translateY(-1px) !important;
+}
+
+.sentry-halo.sentry-safe:hover {
+    background: rgba(76, 175, 80, 0.15) !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2) !important;
+}
+
+.sentry-halo.sentry-caution:hover {
+    background: rgba(255, 193, 7, 0.15) !important;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2) !important;
+}
+
+.sentry-halo.sentry-danger:hover {
+    background: rgba(244, 67, 54, 0.18) !important;
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.25) !important;
+}
+
+/* Make sure Gmail's native styles don't conflict */
+.gD.sentry-halo,
+.go.sentry-halo {
+    background-image: none !important;
+}

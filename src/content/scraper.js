@@ -1,95 +1,116 @@
-class ScraperBot {
-    constructor() {
-        this.lastUrl = location.href;
-        this.observer = null;
-        this.init();
-    }
+/**
+ * Simplified ScraperBot
+ * Extracts sender email from Gmail
+ */
 
-    init() {
-        console.log('Scraper-Bot: Initializing...');
-
-        // Listen for URL changes (SPA navigation)
-        this.observeUrlChange();
-
-        // Initial check in case we loaded directly into an email
-        this.checkForEmail();
-
-        // Observe DOM for dynamic content loading
-        this.observeDOM();
-    }
-
-    observeUrlChange() {
-        // Gmail uses hash changes or pushState.
-        // A simple interval check is robust for Gmail's complex history management.
-        setInterval(() => {
-            const currentUrl = location.href;
-            if (currentUrl !== this.lastUrl) {
-                this.lastUrl = currentUrl;
-                console.log('Scraper-Bot: URL changed to', currentUrl);
-                this.checkForEmail();
-            }
-        }, 1000);
-    }
-
-    observeDOM() {
-        const targetNode = document.body;
-        const config = { childList: true, subtree: true };
-
-        const callback = (mutationsList, observer) => {
-            for (let mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    // We could check for specific nodes here, but robust email detection usually
-                    // relies on finding the specific containers when they stabilize.
-                    // For now, we rely on the periodic check or trigger checkForEmail sparingly.
-                    // To avoid spamming, we might just throttle checks or wait for URL changes + a delay.
-                    // But let's check if the sender element appeared if we are in an email view.
-                    if (this.isEmailView()) {
-                        this.extractSenderInfo();
-                    }
-                }
-            }
-        };
-
-        this.observer = new MutationObserver(callback);
-        this.observer.observe(targetNode, config);
-    }
-
-    isEmailView() {
-        // Rough check if we are likely in a conversation
-        // Gmail URLs for emails usually look like .../#inbox/FMfcgz...
-        // But scraping DOM is better.
-        // Look for the sender container.
-        return document.querySelector('span.gD') !== null;
-    }
-
-    checkForEmail() {
-        // Give Gmail a moment to render
-        setTimeout(() => {
-            if (this.isEmailView()) {
-                this.extractSenderInfo();
-            }
-        }, 1500);
-    }
-
-    extractSenderInfo() {
-        // 'gD' class is often used for the sender's email span
-        const senderElement = document.querySelector('span.gD');
-        if (senderElement) {
-            const email = senderElement.getAttribute('email');
-            const name = senderElement.textContent;
-
-            if (email) {
-                console.log('--------------------------------------------------');
-                console.log('Scraper-Bot: Sender Identified');
-                console.log(`Name: ${name}`);
-                console.log(`Email: ${email}`);
-                console.log('--------------------------------------------------');
-
-                // TODO: Send to sidebar or background script
+(function() {
+    'use strict';
+    
+    console.log('Sentry Scraper: Starting...');
+    
+    let lastSender = null;
+    let lastUrl = location.href;
+    
+    // Main function to extract sender
+    function extractSender() {
+        // Only run in email view (has .h7 header)
+        const header = document.querySelector('.h7');
+        if (!header) {
+            console.log('Sentry: No email header');
+            return;
+        }
+        
+        // Find sender span with email attribute
+        const senderSpan = header.querySelector('span.gD[email]');
+        if (!senderSpan) {
+            console.log('Sentry: No sender span found');
+            return;
+        }
+        
+        const email = senderSpan.getAttribute('email');
+        const name = senderSpan.textContent?.trim();
+        
+        if (!email || !email.includes('@')) {
+            console.log('Sentry: Invalid email');
+            return;
+        }
+        
+        // Don't process same sender twice
+        if (lastSender === email) {
+            return;
+        }
+        
+        // Don't process if this looks like a "to" field
+        const parent = senderSpan.closest('.ha, .gF, [role="listitem"]');
+        if (parent) {
+            const text = parent.textContent?.toLowerCase() || '';
+            if (text.includes('to:') || text.includes('cc:')) {
+                console.log('Sentry: Skipping recipient field');
+                return;
             }
         }
+        
+        lastSender = email;
+        console.log('Sentry: FOUND SENDER:', name, '<' + email + '>');
+        
+        // Send to background
+        chrome.runtime.sendMessage({
+            type: 'SENDER_FOUND',
+            data: { email, name }
+        }).catch(err => {
+            console.log('Sentry: Background not ready');
+        });
+        
+        // Apply visual indicator
+        applyVisualIndicator(senderSpan, email);
     }
-}
-
-// Attach to window so index.js can use it
-window.ScraperBot = ScraperBot;
+    
+    // Apply halo effect
+    function applyVisualIndicator(element, email) {
+        // Check if styles exist
+        if (!document.getElementById('sentry-styles')) {
+            const style = document.createElement('style');
+            style.id = 'sentry-styles';
+            style.textContent = `
+                .sentry-halo {
+                    background: rgba(34, 197, 94, 0.2) !important;
+                    border: 2px solid #22c55e !important;
+                    border-radius: 6px !important;
+                    padding: 2px 6px !important;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Get status from background
+        chrome.runtime.sendMessage({
+            type: 'GET_SENDER_STATUS',
+            data: { email }
+        }).then(response => {
+            if (response && response.status) {
+                element.classList.add('sentry-halo');
+                element.setAttribute('title', `Trust: ${response.contactData?.trustScore || 0}%`);
+            }
+        }).catch(() => {});
+    }
+    
+    // Check on URL change
+    setInterval(() => {
+        if (location.href !== lastUrl) {
+            lastUrl = location.href;
+            lastSender = null;
+            setTimeout(extractSender, 1000);
+        }
+    }, 1000);
+    
+    // Check on DOM changes
+    const observer = new MutationObserver(() => {
+        extractSender();
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    // Initial check
+    setTimeout(extractSender, 1500);
+    
+})();

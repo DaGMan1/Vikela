@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Sentry</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+      font-size: 60px;
+      font-weight: bold;
+      box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: #94a3b8;
+      margin-bottom: 48px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 32px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .feature:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .setup-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .setup-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .setup-desc {
+      color: #94a3b8;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(34, 197, 94, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status.success {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+      display: block;
+    }
+
+    .status.error {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      display: block;
+    }
+
+    .status.loading {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      display: block;
+    }
+
+    .privacy-note {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 24px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+
+    .privacy-note strong {
+      color: #94a3b8;
+    }
+
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .step {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #64748b;
+      border: 2px solid transparent;
+    }
+
+    .step.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .step.completed {
+      background: #22c55e;
+      color: white;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">S</div>
+    <h1>Welcome to Sentry</h1>
+    <p class="subtitle">Your AI-powered email guardian. Stay protected from fraud, manage contacts intelligently, and gain deep insights into every sender.</p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">Fraud Protection</div>
+        <div class="feature-desc">Instant detection of suspicious senders, disposable emails, and phishing attempts</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">👤</div>
+        <div class="feature-title">Smart Profiles</div>
+        <div class="feature-desc">Auto-extract contact info, phone numbers, and social profiles from emails</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✨</div>
+        <div class="feature-title">Visual Indicators</div>
+        <div class="feature-desc">Traffic light halo effects show sender safety at a glance</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Trust Scoring</div>
+        <div class="feature-desc">Advanced algorithms calculate trust based on history and domain reputation</div>
+      </div>
+    </div>
+
+    <div class="step-indicator">
+      <div class="step active" id="step-1">1</div>
+      <div class="step" id="step-2">2</div>
+      <div class="step" id="step-3">3</div>
+    </div>
+
+    <!-- Step 1: Connect Gmail -->
+    <div id="step-1-content" class="setup-section">
+      <div class="setup-title">Connect Your Gmail</div>
+      <div class="setup-desc">Sentry needs access to scan your emails and build contact profiles. Your data stays local and private.</div>
+      <button id="btn-connect-gmail" class="btn btn-primary">
+        <span>🔐</span> Connect Gmail Account
+      </button>
+      <div id="gmail-status" class="status"></div>
+    </div>
+
+    <!-- Step 2: Permissions -->
+    <div id="step-2-content" class="setup-section hidden">
+      <div class="setup-title">Grant Permissions</div>
+      <div class="setup-desc">Sentry needs permission to access Gmail and show the side panel. Click allow on the prompts.</div>
+      <button id="btn-grant-permissions" class="btn btn-primary">
+        <span>✓</span> Grant Permissions
+      </button>
+      <div id="permission-status" class="status"></div>
+    </div>
+
+    <!-- Step 3: Complete -->
+    <div id="step-3-content" class="setup-section hidden">
+      <div class="setup-title">You're All Set!</div>
+      <div class="setup-desc">Sentry is now protecting your inbox. Open Gmail to see it in action.</div>
+      <button id="btn-open-gmail" class="btn btn-primary">
+        <span>🚀</span> Open Gmail
+      </button>
+    </div>
+
+    <div class="privacy-note">
+      <strong>🔒 Privacy First:</strong> All your data is stored locally on your device. Sentry does not send your emails or contact information to external servers. Your privacy is our priority.
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    // Step 1: Connect Gmail
+    document.getElementById('btn-connect-gmail').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-connect-gmail');
+      const status = document.getElementById('gmail-status');
+      
+      btn.disabled = true;
+      status.className = 'status loading';
+      status.textContent = 'Connecting to Gmail...';
+
+      try {
+        chrome.runtime.sendMessage({ type: 'AUTHENTICATE_GMAIL' }, (response) => {
+          if (response.success) {
+            status.className = 'status success';
+            status.textContent = '✓ Gmail connected successfully!';
+            
+            setTimeout(() => {
+              goToStep(2);
+            }, 1000);
+          } else {
+            throw new Error(response.error || 'Authentication failed');
+          }
+        });
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = '✗ ' + error.message;
+        btn.disabled = false;
+      }
+    });
+
+    // Step 2: Grant Permissions
+    document.getElementById('btn-grant-permissions').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-grant-permissions');
+      const status = document.getElementById('permission-status');
+      
+      btn.disabled = true;
+      status.className = 'status loading';
+      status.textContent = 'Requesting permissions...';
+
+      try {
+        // Try to open side panel to trigger permission prompt
+        if (chrome.sidePanel) {
+          await chrome.sidePanel.open({ windowId: chrome.windows.WINDOW_ID_CURRENT });
+        }
+        
+        status.className = 'status success';
+        status.textContent = '✓ Permissions granted!';
+        
+        setTimeout(() => {
+          goToStep(3);
+        }, 1000);
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = '✗ ' + error.message;
+        btn.disabled = false;
+      }
+    });
+
+    // Step 3: Open Gmail
+    document.getElementById('btn-open-gmail').addEventListener('click', () => {
+      chrome.tabs.create({ url: 'https://mail.google.com' });
+      window.close();
+    });
+
+    function goToStep(step) {
+      // Hide all steps
+      document.getElementById('step-1-content').classList.add('hidden');
+      document.getElementById('step-2-content').classList.add('hidden');
+      document.getElementById('step-3-content').classList.add('hidden');
+      
+      // Update step indicators
+      for (let i = 1; i <= 3; i++) {
+        const stepEl = document.getElementById(`step-${i}`);
+        stepEl.classList.remove('active', 'completed');
+        if (i < step) {
+          stepEl.classList.add('completed');
+        } else if (i === step) {
+          stepEl.classList.add('active');
+        }
+      }
+      
+      // Show current step
+      document.getElementById(`step-${step}-content`).classList.remove('hidden');
+      currentStep = step;
+    }
+
+    // Check if already authenticated
+    chrome.runtime.sendMessage({ type: 'CHECK_GMAIL_AUTH' }, (response) => {
+      if (response.isAuthenticated) {
+        goToStep(3);
+      }
+    });
+  </script>
+</body>
+</html>
