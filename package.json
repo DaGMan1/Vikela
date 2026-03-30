@@ -1,13 +1,16 @@
 {
   "name": "vikela",
   "version": "2.0.0",
-  "description": "Vikela — Email intelligence and sender profiling for Gmail",
+  "description": "Vikela \u2014 Email intelligence and sender profiling for Gmail",
   "scripts": {
-    "build": "esbuild src/background/index.js --bundle --outfile=build/background.bundle.js --platform=browser --target=chrome120",
-    "watch": "esbuild src/background/index.js --bundle --outfile=build/background.bundle.js --platform=browser --target=chrome120 --watch",
+    "build": "esbuild src/background/index.js --bundle --outfile=build/background.bundle.js --platform=browser --target=chrome120 && esbuild src/content/scraper.js --bundle --outfile=build/content.bundle.js --platform=browser --target=chrome120",
+    "watch": "esbuild src/background/index.js --bundle --outfile=build/background.bundle.js --platform=browser --target=chrome120 --watch & esbuild src/content/scraper.js --bundle --outfile=build/content.bundle.js --platform=browser --target=chrome120 --watch",
     "build:all": "npm run build"
   },
   "devDependencies": {
     "esbuild": "^0.20.0"
+  },
+  "dependencies": {
+    "@inboxsdk/core": "^2.2.11"
   }
 }

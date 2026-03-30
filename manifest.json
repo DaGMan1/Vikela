@@ -41,7 +41,7 @@
         "https://mail.google.com/*"
       ],
       "js": [
-        "src/content/scraper.js"
+        "build/content.bundle.js"
       ],
       "css": [
         "src/content/halo.css"
